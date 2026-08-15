@@ -1,0 +1,2 @@
+import { NextResponse } from "next/server"; import { getDb } from "@/lib/db";
+export async function GET(){const{rows}=await getDb().query("SELECT id,source_id AS \"sourceId\",connector_type AS \"connectorType\",status,records_fetched AS \"recordsFetched\",error_message AS \"errorMessage\",started_at AS \"startedAt\",finished_at AS \"finishedAt\" FROM ingestion_runs ORDER BY started_at DESC LIMIT 100");return NextResponse.json(rows);}

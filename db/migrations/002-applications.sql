@@ -1,0 +1,10 @@
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+CREATE TABLE IF NOT EXISTS applications (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  profile_id TEXT NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+  opportunity_id TEXT NOT NULL REFERENCES opportunities(id) ON DELETE CASCADE,
+  status TEXT NOT NULL DEFAULT 'PREPARING' CHECK (status IN ('PREPARING', 'READY_FOR_REVIEW', 'SUBMITTED')),
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  UNIQUE(profile_id, opportunity_id)
+);

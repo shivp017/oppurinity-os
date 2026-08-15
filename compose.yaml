@@ -1,0 +1,36 @@
+services:
+  web:
+    build:
+      context: .
+      target: runner
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATABASE_URL: postgresql://opportunity:opportunity@db:5432/opportunity_os
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - resume_data:/app/data
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: opportunity_os
+      POSTGRES_USER: opportunity
+      POSTGRES_PASSWORD: opportunity
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U opportunity -d opportunity_os"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/001-init.sql:ro
+
+volumes:
+  postgres_data:
+  resume_data:

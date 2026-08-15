@@ -1,0 +1,2 @@
+CREATE TABLE IF NOT EXISTS ingestion_runs (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), source_id TEXT NOT NULL, connector_type TEXT NOT NULL, status TEXT NOT NULL CHECK (status IN ('RUNNING','SUCCEEDED','FAILED')), records_fetched INTEGER NOT NULL DEFAULT 0, error_message TEXT, started_at TIMESTAMPTZ NOT NULL DEFAULT NOW(), finished_at TIMESTAMPTZ);
+CREATE INDEX IF NOT EXISTS ingestion_runs_source_started_idx ON ingestion_runs(source_id, started_at DESC);

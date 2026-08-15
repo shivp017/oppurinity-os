@@ -1,0 +1,1 @@
+CREATE TABLE IF NOT EXISTS idempotency_records (key TEXT PRIMARY KEY, route TEXT NOT NULL, response_status INTEGER NOT NULL, response_body JSONB NOT NULL, created_at TIMESTAMPTZ NOT NULL DEFAULT NOW());
